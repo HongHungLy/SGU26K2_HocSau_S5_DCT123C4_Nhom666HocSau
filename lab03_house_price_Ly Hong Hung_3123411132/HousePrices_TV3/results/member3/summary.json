@@ -1,0 +1,25 @@
+{
+  "best_mlp": {
+    "feature_set": "Full (Mutual Information)",
+    "n_features": 279,
+    "transform": "log_std",
+    "drop_outliers_GrLivArea_gt_4000": true,
+    "architecture": [
+      256,
+      128
+    ],
+    "learning_rate": 0.0003,
+    "batch_size": 32,
+    "dropout": 0.3,
+    "weight_decay": 0.01,
+    "epochs": 150,
+    "optimizer": "adamw"
+  },
+  "validation_log_rmse_mean": 0.12757127873502264,
+  "validation_log_rmse_std": 0.0026663312680619234,
+  "validation_log_rmse_ensemble": 0.12377687565710774,
+  "n_seeds": 10,
+  "tv2_xgboost_tuned_val": 0.135426,
+  "mlp_beats_xgboost_tuned": true,
+  "note": "Kaggle score của submission_mlp.csv: điền thủ công sau khi submit."
+}

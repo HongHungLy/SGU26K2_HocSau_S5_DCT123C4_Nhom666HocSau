@@ -1,0 +1,6 @@
+Model,Feature_Set,Log_RMSE
+MLP (ensemble 10 seed),Full,0.12377687565710774
+"MLP (1 seed, trung bình)",Full,0.12757127873502264
+XGBoost Tuned,Full,0.135426
+XGBoost Baseline,Full,0.137608
+Random Forest,Full,0.151819
