@@ -1,0 +1,18 @@
+
+===========================================================================
+ NHẬN XÉT XU HƯỚNG THỰC NGHIỆM A (DÙNG ĐƯA VÀO BÁO CÁO & SLIDE):
+===========================================================================
+1. Xu hướng tổng quan:
+   - Khi tăng số lượng mẫu huấn luyện A từ 200 lên 2000 mẫu,
+     sai số kiểm thử (Test MSE) giảm mạnh từ 0.002610 xuống 0.000465
+     (cải thiện tương ứng ~82.2%). Hệ số xác định R^2 tiệm cận mức rất cao (>0.98).
+2. Hiện tượng học của mô hình:
+   - Với quy mô nhỏ (A = 200, 400), độ phân tán (độ lệch chuẩn giữa các seeds) tương đối lớn,
+     do dữ liệu chưa bao phủ đều không gian 2 chiều [-2, 2] x [-4, 4].
+   - Khi A >= 1000, sai số bắt đầu hội tụ và tiệm cận giới hạn bão hòa (diminishing returns).
+     Việc bổ sung thêm mẫu tiếp tục giảm nhẹ phương sai ước lượng nhưng tốc độ cải thiện chậm lại.
+3. Kết luận:
+   - Quy mô dữ liệu A đóng vai trò quyết định khả năng tổng quát hóa của mạng MLP.
+   - Để đạt hiệu năng xấp xỉ ổn định và tối ưu chi phí tính toán, quy mô từ A = 1200 đến 2000
+     là ngưỡng tối ưu cho bài toán này.
+===========================================================================

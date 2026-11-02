@@ -1,0 +1,100 @@
+KẾ HOẠCH PHÂN CÔNG VÀ BÀN GIAO NHIỆM VỤ BÀI TẬP LỚN 01
+HỌC PHẦN: HỌC SÂU (DEEP LEARNING)
+ĐỀ TÀI: XẤP XỈ HÀM MẬT ĐỘ GAUSSIAN HAI CHIỀU BẰNG MẠNG MLP (PYTORCH)
+
+Gửi: Thành viên 2 và Thành viên 3
+
+Hiện tại, Thành viên 1 (Trưởng nhóm) đã hoàn thành toàn bộ phần hạ tầng kỹ thuật nền tảng của dự án, bao gồm:
+1. Xây dựng pipeline toán học và sinh dữ liệu Gaussian hai chiều độc lập (Train, Validation, Test).
+2. Xây dựng kiến trúc mạng nơ-ron tổng quát FlexibleMLP bằng PyTorch (torch.nn.Module).
+3. Thiết lập vòng lặp huấn luyện chuẩn, bộ đánh giá chỉ số (MSE, MAE, RMSE, R2) và cơ chế lưu checkpoint theo Validation loss.
+4. Hoàn thành toàn bộ Thực nghiệm A (khảo sát quy mô dữ liệu A từ 200 đến 2000 mẫu qua 3 random seeds).
+5. Xây dựng sẵn file Jupyter Notebook (BTL01_Thuc_Nghiem_A.ipynb) và tài liệu README.md phục vụ việc chạy lại thực nghiệm.
+
+Để đảm bảo tiến độ chung và chất lượng bài nộp đạt điểm tối đa theo Rubric của giảng viên, dưới đây là kế hoạch bàn giao nhiệm vụ cụ thể cho từng thành viên:
+
+
+I. CÁC QUY ĐỊNH BẮT BUỘC TỪ GIẢNG VIÊN
+
+1. Về mã nguồn:
+- Bắt buộc triển khai toàn bộ bằng thư viện PyTorch (torch.nn.Module, DataLoader, MSELoss, Adam/SGD). Tuyệt đối không sử dụng TensorFlow, Keras hay các thư viện AutoML thay thế.
+- Không phụ thuộc vào đường dẫn tuyệt đối của máy cá nhân. Mọi đường dẫn đọc/ghi file phải sử dụng đường dẫn tương đối để đảm bảo khả năng tái lập thực nghiệm trên máy của giảng viên.
+
+2. Về tính minh bạch và trung thực học thuật:
+- Mọi bảng biểu và đồ thị trong báo cáo phải được kết xuất từ log thực tế (.csv) và mã nguồn tự chạy. Tuyệt đối không sao chép số liệu từ các tài liệu tham khảo cũ.
+- Mỗi thực nghiệm phải lặp lại tối thiểu 3 random seeds (42, 123, 999) và báo cáo kết quả dưới dạng Trung bình ± Độ lệch chuẩn (Mean ± Std).
+- Tập Test (100 mẫu) là tập dữ liệu độc lập, chỉ dùng duy nhất cho bước đánh giá cuối cùng, không được can thiệp vào quá trình huấn luyện hay chọn siêu tham số.
+
+
+II. PHÂN CÔNG NHIỆM VỤ CỤ THỂ
+
+1. THÀNH VIÊN 2: KỸ SƯ HUẤN LUYỆN VÀ TỐI ƯU HÓA
+- Tỷ lệ đóng góp báo cáo: 33.3%
+- Trọng tâm thực nghiệm: Thực nghiệm B (Khảo sát ảnh hưởng của độ rộng tầng ẩn - số nơ-ron B)
+
+a. Nhiệm vụ thực nghiệm và mã nguồn:
+- Chạy script thực nghiệm đã được xây dựng sẵn bằng lệnh:
+  python exp_B_width.py
+- Script sẽ tự động khảo sát số nơ-ron B trong tập [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 32, 64] với MLP 1 tầng ẩn, cố định 1000 mẫu huấn luyện, lặp lại qua 3 seeds.
+- Kiểm tra các kết quả đầu ra được sinh tự động:
+  + Bảng số liệu tổng hợp: logs/exp_B_summary.csv
+  + Đồ thị so sánh Train Loss vs Test Loss: figures/exp_B_error_vs_nodes.png
+
+b. Nhiệm vụ viết Báo cáo (file Word/PDF):
+- Soạn thảo Mục 3: Mô hình và Cài đặt thuật toán PyTorch.
+  + Trình bày sơ đồ kiến trúc FlexibleMLP, số lượng tham số tương ứng.
+  + Diễn giải các công thức toán học: Forward pass, hàm mất mát MSELoss, thuật toán lan truyền ngược (Backpropagation) và cập nhật trọng số bằng Adam.
+  + Giải thích vai trò của model.train(), model.eval(), torch.no_grad() và cơ chế lưu checkpoint best_model.pt theo Validation loss.
+- Soạn thảo Mục 4.B: Kết quả Thực nghiệm B.
+  + Lập bảng kết quả số liệu (Train MSE, Test MSE ± Std theo số nơ-ron B).
+  + Chèn đồ thị exp_B_error_vs_nodes.png và nhận xét khoa học.
+  + Phân tích chuyên sâu 2 hiện tượng trọng tâm: Hiện tượng thiếu khớp (Underfitting) khi B quá nhỏ (B = 1, 2) và hiện tượng quá khớp (Overfitting) hoặc bão hòa khi B tăng lớn.
+
+c. Nhiệm vụ chuẩn bị Slide thuyết trình:
+- Dựng cấu trúc slide chung của nhóm theo chuẩn báo cáo khoa học (khoảng 12 - 15 slide).
+- Phụ trách thiết kế các slide về Kiến trúc mạng và Kết quả Thực nghiệm B.
+
+
+2. THÀNH VIÊN 3: KỸ SƯ ĐÁNH GIÁ VÀ ĐỘ SÂU
+- Tỷ lệ đóng góp báo cáo: 33.4%
+- Trọng tâm thực nghiệm: Thực nghiệm C (Khảo sát ảnh hưởng của độ sâu - số tầng ẩn C) và Phân tích tổng hợp
+
+a. Nhiệm vụ thực nghiệm và mã nguồn:
+- Chạy script thực nghiệm đã được xây dựng sẵn bằng lệnh:
+  python exp_C_depth.py
+- Script sẽ tự động khảo sát số tầng ẩn C trong tập [1, 2, 3, 4, 5], lặp lại qua 3 seeds và ghi nhận thời gian chạy.
+- Kiểm tra các kết quả đầu ra được sinh tự động:
+  + Bảng số liệu tổng hợp: logs/exp_C_summary.csv
+  + Đồ thị sai số và thời gian huấn luyện: figures/exp_C_error_and_time_vs_depth.png
+
+b. Nhiệm vụ viết Báo cáo (file Word/PDF):
+- Soạn thảo Mục 4.C: Kết quả Thực nghiệm C.
+  + Lập bảng kết quả gồm: Số tầng C, số tham số mô hình, Test MSE ± Std và Thời gian huấn luyện (giây).
+  + Chèn đồ thị exp_C_error_and_time_vs_depth.png.
+  + Phân tích mối quan hệ giữa độ sâu, thời gian huấn luyện và độ chính xác; phân tích hiện tượng triệt tiêu đạo hàm (vanishing gradient) khi tăng số tầng đối với bài toán này.
+- Soạn thảo Mục 5: Thảo luận và Phân tích chuyên sâu (Mục quan trọng, chiếm 10 điểm trong Rubric).
+  + So sánh đối chiếu kết quả của cả 3 thực nghiệm A, B, C để xác định cấu hình mạng tối ưu nhất toàn diện.
+  + Phân tích các trường hợp kết quả không như kỳ vọng và nguyên nhân kỹ thuật.
+  + Phân tích giới hạn của kiến trúc MLP tiêu chuẩn đối với bài toán xấp xỉ hàm mật độ xác suất và đề xuất hướng cải tiến (ví dụ: mạng RBF, chuẩn hóa Batch Normalization, điều chỉnh hàm kích hoạt).
+- Soạn thảo Mục 6: Kết luận và Tài liệu tham khảo theo chuẩn trích dẫn khoa học.
+
+c. Nhiệm vụ chuẩn bị Slide thuyết trình:
+- Phụ trách thiết kế các slide về Kết quả Thực nghiệm C, Thảo luận, Kết luận và Hướng phát triển.
+- Chuẩn bị các câu hỏi phản biện kỹ thuật để sẵn sàng trả lời vấn đáp với hội đồng.
+
+
+III. KẾ HOẠCH TIẾN ĐỘ THỰC HIỆN
+
+1. Giai đoạn 1 (Trong vòng 2 ngày tới):
+Thành viên 2 và Thành viên 3 hoàn thành việc chạy thực nghiệm B và C trên máy cá nhân, kiểm tra số liệu log CSV và đồ thị xuất ra.
+
+2. Giai đoạn 2 (Trong vòng 4 ngày tới):
+Từng thành viên hoàn thành bản thảo nội dung văn bản phần mình phụ trách và gửi lại cho Trưởng nhóm.
+
+3. Giai đoạn 3 (Trước ngày nộp 2 ngày):
+Nhóm họp rà soát, ghép nối toàn bộ báo cáo Word (quy chuẩn từ 10 - 20 trang), hoàn thiện Slide thuyết trình (.pptx) và tập dượt thuyết trình/demo mã nguồn.
+
+4. Giai đoạn 4 (Nộp bài chính thức):
+Đóng gói toàn bộ sản phẩm theo đúng quy cách: BTL01_Nhom_HoTen_MSSV.zip.
+
+
