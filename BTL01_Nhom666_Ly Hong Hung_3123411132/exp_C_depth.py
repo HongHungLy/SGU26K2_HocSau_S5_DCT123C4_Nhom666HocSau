@@ -75,7 +75,7 @@ def run_experiment_c(
 
     for C in layers_list:
         hidden_dims = [nodes_per_layer] * C
-        test_mse_list, time_list = [], []
+        test_mse_list, test_mae_list, val_mse_list, epoch_list, time_list = [], [], [], [], []
 
         for seed in seeds:
             np.random.seed(seed)
@@ -112,10 +112,13 @@ def run_experiment_c(
 
             test_metrics, _ = evaluate_model(trainer.model, X_test, y_test)
             test_mse_list.append(test_metrics["mse"])
+            test_mae_list.append(test_metrics["mae"])
+            val_mse_list.append(res["best_val_loss"])   # dùng để CHỌN cấu hình (không dùng tập test)
+            epoch_list.append(res["best_epoch"])
             time_list.append(elapsed)
 
         mse_mean, mse_std = np.mean(test_mse_list), np.std(test_mse_list)
-        time_mean = np.mean(time_list)
+        time_mean, time_std = np.mean(time_list), np.std(time_list)
 
         summary_records.append({
             "layers_C": C,
@@ -123,6 +126,12 @@ def run_experiment_c(
             "test_mse_std": mse_std,
             "training_time_s": time_mean,
             "total_params": model.count_parameters(),
+            # --- các cột bổ sung (không ảnh hưởng các cột gốc) ---
+            "training_time_std": time_std,
+            "val_mse_mean": np.mean(val_mse_list),
+            "val_mse_std": np.std(val_mse_list),
+            "test_mae_mean": np.mean(test_mae_list),
+            "best_epoch_mean": np.mean(epoch_list),
         })
         print(f"C = {C} tầng | Params: {model.count_parameters():4d} | Test MSE: {mse_mean:.6f} +/- {mse_std:.6f} | Time: {time_mean:.2f}s")
 
