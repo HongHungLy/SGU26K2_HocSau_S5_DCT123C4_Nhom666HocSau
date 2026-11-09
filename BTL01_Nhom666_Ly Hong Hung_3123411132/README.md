@@ -63,7 +63,7 @@ BTL01_Nhom666_Ly Hong Hung_3123411132/
 │   ├── exp_C_epochs/                        # Log chi tiết train/val loss qua từng epoch của Thực nghiệm C
 │   ├── exp_ABC_best_configs.csv             # Bảng so sánh các cấu hình tiêu biểu nhất
 │   └── exp_ABC_ranking_1000samples.csv      # Bảng xếp hạng hiệu năng trên 1000 mẫu train
-├── figures/                                 # 14 hình ảnh, biểu đồ trực quan hóa độ nét cao (DPI 300)
+├── figures/                                 # 15 hình ảnh, biểu đồ trực quan hóa độ nét cao (DPI 300)
 │   ├── mlp_architecture.png                 # Hình 4: Sơ đồ kiến trúc mạng nơ-ron FlexibleMLP
 │   ├── true_gaussian_surface.png            # Bề mặt giải tích lý thuyết 3D
 │   ├── data_3d_scatter.png                  # Scatter plot 3D dữ liệu huấn luyện (500 mẫu đại diện)
@@ -72,9 +72,10 @@ BTL01_Nhom666_Ly Hong Hung_3123411132/
 │   ├── exp_A_best_loss_curve.png            # Đường cong hội tụ Loss Train vs Val (A = 2000, seed = 123)
 │   ├── exp_A_best_pred_vs_true_3d.png       # Đánh giá độ bám khít trên Test Set 100 mẫu độc lập
 │   ├── exp_A_surface_comparison.png         # So sánh trực quan bề mặt thực tế vs bề mặt xấp xỉ MLP
-│   ├── exp_B_error_vs_nodes.png             # Thực nghiệm B: Sai số theo số nơ-ron tầng ẩn B
+│   ├── exp_B_error_vs_nodes.png             # Thực nghiệm B: Sai số theo số nơ-ron tầng ẩn B (N = 1000 mẫu)
+│   ├── exp_B_error_vs_nodes_n200.png        # Đồ thị sai số theo B khi thiếu dữ liệu (N = 200 mẫu)
 │   ├── exp_B_ratio_val_train.png            # Tỉ số Val MSE / Train MSE (N = 1000 mẫu)
-│   ├── exp_B_ratio_val_train_n200.png       # Minh chứng Overfitting khi thiếu dữ liệu (N = 200 mẫu)
+│   ├── exp_B_ratio_val_train_n200.png       # Minh chứng Overfitting qua tỉ số Val/Train MSE (N = 200 mẫu)
 │   ├── exp_C_error_and_time_vs_depth.png    # Thực nghiệm C: Đánh giá Sai số và Thời gian theo độ sâu C
 │   ├── exp_C_gradient_norms.png             # Phân tích Triệt tiêu đạo hàm: Sigmoid vs Tanh vs ReLU
 │   └── exp_ABC_comparison.png               # Đồ thị tổng hợp đối chiếu 4 chiều Thực nghiệm A - B - C
@@ -141,7 +142,7 @@ Khảo sát tác động của số lượng nơ-ron trên 1000 mẫu train, đ�
 ```bash
 python exp_B_width.py
 ```
-*Kết quả:* Xuất các file tổng hợp `logs/exp_B_summary.csv`, `logs/exp_B_summary_n200.csv`, đồ thị `figures/exp_B_error_vs_nodes.png`, `figures/exp_B_ratio_val_train_n200.png` và toàn bộ log epoch trong `logs/exp_B_epochs/`.
+*Kết quả:* Xuất các file tổng hợp `logs/exp_B_summary.csv`, `logs/exp_B_summary_n200.csv`, đồ thị `figures/exp_B_error_vs_nodes.png`, `figures/exp_B_error_vs_nodes_n200.png`, `figures/exp_B_ratio_val_train.png`, `figures/exp_B_ratio_val_train_n200.png` và toàn bộ log epoch trong `logs/exp_B_epochs/`.
 
 ---
 
