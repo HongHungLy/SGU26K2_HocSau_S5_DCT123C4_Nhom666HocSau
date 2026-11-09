@@ -63,8 +63,7 @@ BTL01_Nhom666_Ly Hong Hung_3123411132/
 │   ├── exp_C_epochs/                        # Log chi tiết train/val loss qua từng epoch của Thực nghiệm C
 │   ├── exp_ABC_best_configs.csv             # Bảng so sánh các cấu hình tiêu biểu nhất
 │   └── exp_ABC_ranking_1000samples.csv      # Bảng xếp hạng hiệu năng trên 1000 mẫu train
-├── figures/                                 # 15 hình ảnh, biểu đồ trực quan hóa độ nét cao (DPI 300)
-│   ├── sgu_logo.png                         # Logo Đại học Sài Gòn
+├── figures/                                 # 14 hình ảnh, biểu đồ trực quan hóa độ nét cao (DPI 300)
 │   ├── mlp_architecture.png                 # Hình 4: Sơ đồ kiến trúc mạng nơ-ron FlexibleMLP
 │   ├── true_gaussian_surface.png            # Bề mặt giải tích lý thuyết 3D
 │   ├── data_3d_scatter.png                  # Scatter plot 3D dữ liệu huấn luyện (500 mẫu đại diện)
