@@ -10,17 +10,26 @@
 
 ## 1. NHÓM THỰC NGHIỆM 1 — BASELINE, DATA AUGMENTATION, ACTIVATION & CLASS WEIGHT
 - **Phụ trách**: Thành viên 1 — **Lý Hồng Hưng** (`3123411132`)
-- **Môi trường chạy**: Kaggle Notebook — GPU Tesla T4 (cập nhật ngày chạy sau khi hoàn tất)
-- **Cấu hình cố định**: Optimizer = `Adam (lr=1e-3, weight_decay=1e-4)`, Scheduler = `ReduceLROnPlateau(factor=0.5, patience=4)`, `batch_size=64`, `seed=42`, `EarlyStopping(patience=10)`.
+- **Ngày chạy**: 22/11/2026
+- **Môi trường chạy**: Kaggle Notebook — GPU NVIDIA Tesla T4 (PyTorch + AMP Mixed Precision)
+- **Cấu hình cố định**: Optimizer = `Adam (lr=1e-3, weight_decay=1e-4)`, Scheduler = `ReduceLROnPlateau(mode='min', factor=0.5, patience=4, min_lr=1e-6)`, `batch_size=64`, `max_epochs=45`, `seed=42`, `EarlyStopping(patience=10, monitor='val_acc')`.
+- **Nguồn số liệu thật**: `logs/exp1_summary.csv` và 6 file log từng epoch `logs/Exp1_*_epochs.csv`.
 
-| Mã TN | Ngày chạy | Kiến trúc | Data Aug | Activation | Loss | Params | Best Ep | Val Acc (%) | Val Loss | Test Acc (%) | Test Macro F1 (%) | Disgust Recall (%) | Thời gian (s) | Nhận xét & Quyết định |
-| :---: | :---: | :--- | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| `Exp1_1` | *Chưa chạy* | SmallCNN | Không | ReLU | CrossEntropy | - | - | - | - | - | - | - | - | Mốc Baseline 0 (kỳ vọng overfit mạnh) |
-| `Exp1_2` | *Chưa chạy* | SmallCNN | Có | ReLU | CrossEntropy | - | - | - | - | - | - | - | - | Đo mức giảm overfitting nhờ Augmentation |
-| `Exp1_3` | *Chưa chạy* | MediumCNN | Có | ReLU | CrossEntropy | - | - | - | - | - | - | - | - | Đo tác động tăng độ sâu mạng |
-| `Exp1_4` | *Chưa chạy* | MediumCNN | Có | LeakyReLU | CrossEntropy | - | - | - | - | - | - | - | - | So sánh LeakyReLU vs ReLU |
-| `Exp1_5` | *Chưa chạy* | MediumCNN | Có | Sigmoid | CrossEntropy | - | - | - | - | - | - | - | - | Kiểm chứng hiện tượng triệt tiêu gradient |
-| `Exp1_6` | *Chưa chạy* | MediumCNN | Có | ReLU | Weighted CE | - | - | - | - | - | - | - | - | Kiểm tra cải thiện Recall lớp thiểu số Disgust |
+| Mã TN | Ngày chạy | Kiến trúc | Data Aug | Activation | Loss | Params | Epochs chạy / Best Ep | Train Acc (cuối) | Val Acc (%) | Min Val Loss | Test Acc (%) | Test Macro F1 (%) | Disgust Recall (%) | Thời gian (s) | Nhận xét & Quyết định |
+| :---: | :---: | :--- | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| `Exp1_1` | 22/11/2026 | SmallCNN | Không | ReLU | CrossEntropy | 1.469.095 | 36 / 26 | 91.16% | 64.86% | 1.0276 | 65.17% | 63.70% | 56.36% | 223.4 | **Overfitting nặng** (Gap Train-Val = +27.10%, Val Loss tăng ngược sau ep 12) → Bổ sung Data Augmentation ở `Exp1_2`. |
+| `Exp1_2` | 22/11/2026 | SmallCNN | Có | ReLU | CrossEntropy | 1.469.095 | 45 / 44 | 61.83% | 65.23% | 0.9414 | 66.20% | 61.00% | 32.73% | 461.4 | **Triệt tiêu overfitting** (Gap = -2.33%), Test Acc tăng **+1.03%**, Val Loss giảm mạnh xuống 0.9414 → Tăng độ sâu mạng lên `MediumCNN`. |
+| `Exp1_3` | 22/11/2026 | MediumCNN | Có | ReLU | CrossEntropy | 6.606.919 | 45 / 44 | 65.77% | **67.15%** | **0.9135** | 67.99% | 63.81% | 56.36% | 581.4 | Tăng độ sâu (8 tầng Conv) giúp Test Acc tăng **+1.79%** (67.99%), không overfit (Gap = -0.54%) → Dùng `MediumCNN` so sánh Activation & Loss. |
+| `Exp1_4` | 22/11/2026 | MediumCNN | Có | LeakyReLU | CrossEntropy | 6.606.919 | 45 / 44 | 64.50% | 65.20% | 0.9204 | 67.40% | 63.97% | 56.36% | 587.4 | Hiệu năng ổn định, Test Macro F1 nhỉnh nhẹ (+0.16%) nhưng Val/Test Acc thấp hơn ReLU (-0.59%) → Giữ ReLU làm mặc định. |
+| `Exp1_5` | 22/11/2026 | MediumCNN | Có | Sigmoid | CrossEntropy | 6.606.919 | 45 / 41 | 51.23% | 52.52% | 1.2335 | 53.13% | 40.18% | **0.00%** | 589.1 | **Sụp đổ do Vanishing Gradient**: Test Acc giảm -14.86% so với ReLU, lớp `Disgust` Recall = 0% → Loại bỏ Sigmoid cho mạng CNN sâu. |
+| `Exp1_6` | 22/11/2026 | MediumCNN | Có | ReLU | **Weighted CE** (`sqrt_balanced`) | 6.606.919 | 45 / 44 | 66.81% | 67.09% | 0.9277 | **68.51%** | **65.63%** | **74.55%** | 581.1 | **Tốt nhất Nhóm 1**: Test Acc đạt **68.51%**, Macro F1 **65.63%** (+1.82%), **Disgust Recall tăng vọt +18.19%** (56.36% → 74.55%). Lưu checkpoint bàn giao TV3 & làm mốc cho TV2. |
+
+### Tóm tắt phát hiện chính từ Nhóm 1 (chuyển giao cho TV2 & TV3)
+1. **Data Augmentation bắt buộc phải bật**: Giúp giảm Gap Train-Val từ `+27.10%` xuống gần `0%` và tăng Test Acc `+1.03%`.
+2. **Hàm kích hoạt**: `ReLU` vượt trội hoàn toàn `Sigmoid` (`+14.86%` Test Acc) và nhỉnh hơn `LeakyReLU` (`+0.59%`).
+3. **Weighted CrossEntropy (`sqrt_balanced`) rất hiệu quả**: Tăng mạnh `Disgust Recall` lên `74.55%` đồng thời nâng cả `Test Acc` (`68.51%`) lẫn `Macro F1` (`65.63%`).
+4. **Dư địa cải thiện cho TV2**: Tại epoch 45, `Exp1_3` và `Exp1_6` vẫn chưa bị overfitting (Val Loss vẫn đang giảm) → TV2 nên thử tăng số epoch (60–80), dùng `CosineAnnealingLR`, thử kiến trúc sâu hơn (ResNet-mini / LargeCNN) và Transfer Learning.
+5. **Checkpoint bàn giao TV3**: `checkpoints/Exp1_6_MediumCNN_Aug_ReLU_WeightedCE_best.pth` (đã đẩy sẵn lên nhánh `develop`).
 
 ---
 

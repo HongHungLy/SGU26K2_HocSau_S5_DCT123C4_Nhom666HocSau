@@ -41,10 +41,30 @@ BTLON02_Emotion_Ly Hong Hung_3123411132/
 ├── report/                         # Báo cáo Word/PDF & Slide PPTX/PDF nộp bài
 ├── data/                           # Chứa fer2013.csv khi chạy local (được .gitignore)
 ├── exp1_baseline.py                # [TV1] Script CLI chạy toàn bộ Thực nghiệm Nhóm 1
+├── eda_fer2013.py                  # [TV1] Script CLI chạy EDA & xuất hình
+├── HUONG_DAN_BAN_GIAO_TV2_TV3.md   # [TV1] Tài liệu bàn giao chi tiết cho TV2 & TV3
 ├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
+
+---
+
+## 2.1. TÓM TẮT KẾT QUẢ THỰC NGHIỆM NHÓM 1 (TV1 — ĐÃ HOÀN TẤT)
+
+Chạy trên Kaggle GPU NVIDIA Tesla T4 (`45 epochs`, `batch_size=64`, `Adam lr=1e-3`, `seed=42`, log tại `logs/exp1_summary.csv`):
+
+| Mã TN | Mô hình | Data Aug | Activation | Loss | Val Acc (%) | Test Acc (%) | Macro F1 (%) | Disgust Recall (%) |
+| :---: | :--- | :---: | :---: | :--- | :---: | :---: | :---: | :---: |
+| `Exp1_1` | SmallCNN | Không | ReLU | CrossEntropy | 64.86% | 65.17% | 63.70% | 56.36% |
+| `Exp1_2` | SmallCNN | Có | ReLU | CrossEntropy | 65.23% | 66.20% | 61.00% | 32.73% |
+| `Exp1_3` | MediumCNN | Có | ReLU | CrossEntropy | **67.15%** | 67.99% | 63.81% | 56.36% |
+| `Exp1_4` | MediumCNN | Có | LeakyReLU | CrossEntropy | 65.20% | 67.40% | 63.97% | 56.36% |
+| `Exp1_5` | MediumCNN | Có | Sigmoid | CrossEntropy | 52.52% | 53.13% | 40.18% | **0.00%** |
+| `Exp1_6` | **MediumCNN** | **Có** | **ReLU** | **Weighted CE** | 67.09% | **68.51%** | **65.63%** | **74.55%** |
+
+- **Checkpoint tốt nhất TV1 bàn giao sẵn trên nhánh `develop`**: `checkpoints/Exp1_6_MediumCNN_Aug_ReLU_WeightedCE_best.pth`.
+- **Chi tiết hướng dẫn tiếp nhận & triển khai cho TV2 & TV3**: Xem tệp **`HUONG_DAN_BAN_GIAO_TV2_TV3.md`**.
 
 ---
 

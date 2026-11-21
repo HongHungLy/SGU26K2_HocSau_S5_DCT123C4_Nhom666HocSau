@@ -24,38 +24,45 @@
 
 ### Slide 3: Khám phá dữ liệu (EDA) & Mất cân bằng lớp
 - **Hình minh họa chính**: `figures/eda_histogram_distribution.png` + `figures/eda_train_samples.png`.
-- **Điểm nhấn số liệu**:
+- **Điểm nhấn số liệu thật (`logs/eda_class_distribution.csv`)**:
   - `Happy` nhiều nhất: **7.215 ảnh train (25.13%)**.
   - `Disgust` ít nhất: **436 ảnh train (1.52%)** → chênh lệch **16.55 lần**.
-  - Phân bố tỉ lệ giữa `Training`, `PublicTest`, `PrivateTest` tương đồng → đảm bảo đánh giá nhất quán.
+  - Phân bố 7 lớp đồng đều giữa 3 tập `Training / PublicTest / PrivateTest` → đảm bảo đánh giá công bằng, không rò rỉ dữ liệu.
 
 ---
 
 ### Slide 4: Pipeline PyTorch & Chiến lược Data Augmentation
 - **Hình minh họa chính**: `figures/eda_augmentation_demo.png` (1 ảnh gốc vs 6 ảnh Augmented).
-- **Chuẩn hóa**: Grayscale `[-1, 1]` (hoặc RGB ImageNet cho TV2 fine-tune).
-- **Data Augmentation (chỉ trên tập Train)**:
-  - `RandomHorizontalFlip(0.5)`
-  - `RandomRotation(±10°)`
-  - `RandomAffine(translate=10%, scale=0.9–1.1)`
-  - `RandomErasing(p=0.2)`
-- **Khung huấn luyện dùng chung (`trainer.py`)**: AMP GPU, `EarlyStopping(patience=10)`, `ModelCheckpoint`, `ReduceLROnPlateau`, tự động ghi log CSV từng epoch.
+- **Chuẩn hóa**: Grayscale `[-1, 1]` (và hỗ trợ RGB ImageNet cho TV2 fine-tune).
+- **Data Augmentation (chỉ bật trên Train)**:
+  - `RandomHorizontalFlip(0.5)`, `RandomRotation(±10°)`, `RandomAffine(translate=10%, scale=0.9–1.1)`, `RandomErasing(p=0.2)`.
+- **Khung huấn luyện dùng chung (`src/trainer.py`)**: PyTorch + AMP GPU Tesla T4, `Adam (lr=1e-3, wd=1e-4)`, `ReduceLROnPlateau`, `EarlyStopping(patience=10)`, `ModelCheckpoint`, tự động ghi log CSV.
 
 ---
 
 ### Slide 5: Kiến trúc Mô hình Baseline (`SmallCNN` vs `MediumCNN`)
 - **Khối cơ sở**: `Conv2d(3×3) → BatchNorm2d → Activation → MaxPool2d(2×2) → Dropout2d(0.25)`.
-- **`SmallCNN`**: 3 Block (`32 → 64 → 128`, 6 tầng Conv) + `FC(256) → Dropout(0.5) → FC(7)`.
-- **`MediumCNN`**: 3 Block VGG-style (`2×64 → 3×128 → 3×256`, 8 tầng Conv) + `FC(512) → Dropout(0.5) → FC(7)`.
-- **Thiết kế hỗ trợ TV3**: Gắn sẵn thuộc tính `last_conv_layer` để trích xuất Final Conv Filters và Grad-CAM.
+- **`SmallCNN` (1.47M params)**: 3 Block (`2×32 → 2×64 → 2×128`, 6 tầng Conv) + `FC(256) → Dropout(0.5) → FC(7)`.
+- **`MediumCNN` (6.61M params)**: 3 Block VGG-style (`2×64 → 3×128 → 3×256`, 8 tầng Conv) + `FC(512) → Dropout(0.5) → FC(7)`.
+- **Thiết kế hỗ trợ TV3**: Tích hợp thuộc tính `last_conv_layer` để trích xuất Final Conv Filters & Grad-CAM.
 
 ---
 
-### Slide 6: Kết quả Thực nghiệm Nhóm 1 (6 thực nghiệm có kiểm soát)
-- **Hình minh họa chính**: `figures/exp1_baseline_comparison.png` + đường cong nổi bật (`Exp1_1` vs `Exp1_2` vs `Exp1_3`).
-- **Bảng tóm tắt kết quả** *(điền số liệu thật từ `logs/exp1_summary.csv` sau khi chạy Kaggle)*:
-  - `Exp1_1` vs `Exp1_2`: Data Augmentation giúp giảm overfitting và tăng Test Acc rõ rệt.
-  - `Exp1_2` vs `Exp1_3`: `MediumCNN` sâu hơn cải thiện khả năng học đặc trưng khuôn mặt.
-  - `Exp1_3` vs `Exp1_4` vs `Exp1_5`: `ReLU / LeakyReLU` vượt trội `Sigmoid` (tránh vanishing gradient).
-  - `Exp1_3` vs `Exp1_6`: `Weighted CrossEntropy` cải thiện Recall lớp thiểu số `Disgust`.
-- **Chuyển tiếp sang TV2**: Từ mốc Baseline của TV1, TV2 tiếp tục mở rộng lên Deep CNN, Transfer Learning & tối ưu siêu tham số.
+### Slide 6: Kết quả Thực nghiệm Nhóm 1 (6 thực nghiệm trên GPU T4)
+- **Hình minh họa chính**: `figures/exp1_baseline_comparison.png` + cặp so sánh đường cong `Exp1_1` (Overfit) vs `Exp1_6` (Hội tụ chuẩn).
+- **Bảng tóm tắt kết quả thật (`logs/exp1_summary.csv`)**:
+
+| Mã TN | Cấu hình | Val Acc | Test Acc | Macro F1 | Disgust Recall |
+| :---: | :--- | :---: | :---: | :---: | :---: |
+| `Exp1_1` | SmallCNN — Không Aug, ReLU | 64.86% | 65.17% | 63.70% | 56.36% |
+| `Exp1_2` | SmallCNN — Có Aug, ReLU | 65.23% | 66.20% | 61.00% | 32.73% |
+| `Exp1_3` | MediumCNN — Có Aug, ReLU | **67.15%** | 67.99% | 63.81% | 56.36% |
+| `Exp1_4` | MediumCNN — Có Aug, LeakyReLU | 65.20% | 67.40% | 63.97% | 56.36% |
+| `Exp1_5` | MediumCNN — Có Aug, Sigmoid | 52.52% | 53.13% | 40.18% | **0.00%** |
+| `Exp1_6` | **MediumCNN — Aug, ReLU, Weighted CE** | 67.09% | **68.51%** | **65.63%** | **74.55%** |
+
+- **4 kết luận cốt lõi**:
+  1. **Augmentation triệt tiêu overfitting**: Giảm Gap Train-Val từ `+27.10%` xuống `-2.33%`, Test Acc `+1.03%`.
+  2. **Tăng độ sâu hiệu quả**: `MediumCNN` tăng `+1.79%` Test Acc so với `SmallCNN`.
+  3. **Activation quyết định khả năng học**: `Sigmoid` bị triệt tiêu gradient (`-14.86%` Test Acc, `Disgust Recall = 0%`).
+  4. **Weighted CE (`sqrt_balanced`) bứt phá**: Đạt **68.51% Test Acc**, **65.63% Macro F1**, kéo **Disgust Recall lên 74.55% (+18.19%)** → Bàn giao mốc & checkpoint cho TV2, TV3.

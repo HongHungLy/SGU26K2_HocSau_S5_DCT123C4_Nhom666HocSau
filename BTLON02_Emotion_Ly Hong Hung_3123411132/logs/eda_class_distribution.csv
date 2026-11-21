@@ -1,0 +1,8 @@
+﻿Label_ID,Emotion,Training,PublicTest_Val,PrivateTest_Test,Total,Train_Ratio_%
+0,Angry,3995,467,491,4953,13.92
+1,Disgust,436,56,55,547,1.52
+2,Fear,4097,496,528,5121,14.27
+3,Happy,7215,895,879,8989,25.13
+4,Sad,4830,653,594,6077,16.82
+5,Surprise,3171,415,416,4002,11.05
+6,Neutral,4965,607,626,6198,17.29
