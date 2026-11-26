@@ -1,0 +1,24 @@
+# Core Deep Learning Framework (PyTorch)
+# Lưu ý: Nếu cài bản GPU CUDA, hãy cài torch & torchvision theo lệnh chỉ định CUDA index-url trong README.md trước.
+torch>=2.1.0
+torchvision>=0.16.0
+torchinfo>=1.8.0
+
+# Scientific Computing & Data Analysis
+numpy>=1.24.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+scikit-image>=0.21.0
+
+# Image Processing & Visualization
+Pillow>=10.0.0
+opencv-python>=4.8.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Training Monitoring (TensorBoard - dùng cho nhóm 4. Training Utilities)
+tensorboard>=2.15.0
+
+# Jupyter Environment
+jupyter>=1.0.0
+ipykernel>=6.25.0
