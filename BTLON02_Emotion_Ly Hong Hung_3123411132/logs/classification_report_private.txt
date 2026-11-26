@@ -1,0 +1,16 @@
+Model: resnet34 | ckpt: checkpoints\best_model.pth
+PrivateTest: Acc=0.7119 MacroF1=0.7083
+
+              precision    recall  f1-score   support
+
+       Angry     0.6358    0.6436    0.6397       491
+     Disgust     0.8696    0.7273    0.7921        55
+        Fear     0.6087    0.5038    0.5513       528
+       Happy     0.8849    0.9181    0.9012       879
+         Sad     0.5463    0.5657    0.5558       594
+    Surprise     0.8321    0.8221    0.8271       416
+     Neutral     0.6677    0.7157    0.6908       626
+
+    accuracy                         0.7119      3589
+   macro avg     0.7207    0.6995    0.7083      3589
+weighted avg     0.7099    0.7119    0.7098      3589
