@@ -8,8 +8,8 @@
 - **Môn học**: Học Sâu (Deep Learning)
 - **Bảng phân công 3 thành viên**:
   - **TV1 — Lý Hồng Hưng (3123411132)**: EDA, Pipeline PyTorch chuẩn, Data Augmentation & Thực nghiệm Nhóm 1 (Baseline, Activation, Class Weight) — 33%
-  - **TV2 — *(điền tên)***: Kiến trúc CNN nâng cao, Transfer Learning, Tối ưu siêu tham số & Fail Cases — 34%
-  - **TV3 — *(điền tên)***: Đánh giá Public/Private Test, Trực quan hóa Final Conv Filters & Grad-CAM, Tổng hợp sản phẩm — 33%
+  - **TV2 — Nguyễn Bá Khải (3123411138)**: Kiến trúc CNN nâng cao, Transfer Learning, Tối ưu siêu tham số & Fail Cases — 34%
+  - **TV3 — Hà Trần Gia Nguyên (3123411199)**: Đánh giá Public/Private Test, Trực quan hóa Final Conv Filters & Grad-CAM, Tổng hợp sản phẩm — 33%
 
 ---
 

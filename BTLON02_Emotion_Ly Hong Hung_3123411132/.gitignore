@@ -19,11 +19,12 @@ data/PrivateTest/
 data/train/
 data/test/
 
-# Model checkpoints nặng (.pth / .pt) - chỉ giữ lại checkpoint tốt nhất của TV1 (<100MB) để TV3 & GV kiểm tra trực tiếp
+# Model checkpoints nặng (.pth / .pt) - chỉ giữ lại checkpoint tiêu biểu (<100MB) để TV3 & GV kiểm tra trực tiếp
 checkpoints/*.pth
 checkpoints/*.pt
 checkpoints/*.h5
 !checkpoints/Exp1_6_MediumCNN_Aug_ReLU_WeightedCE_best.pth
+!checkpoints/best_model.pth
 
 # Archive tạm từ Kaggle
 *.zip

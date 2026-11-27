@@ -1,0 +1,15 @@
+{
+  "exp_name": "Exp2_A4_ResNet34_TL_128",
+  "best_epoch": 27,
+  "best_val_acc": 0.7055,
+  "best_val_macro_f1": 0.6985,
+  "test_acc": 0.7119,
+  "test_macro_f1": 0.7083,
+  "test_disgust_recall": 0.7273,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "scheduler": "plateau",
+  "label_smoothing": 0.0,
+  "size_mb": 85.3
+}
